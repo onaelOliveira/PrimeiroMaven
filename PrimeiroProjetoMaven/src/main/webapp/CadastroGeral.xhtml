@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta http-equiv="Context-Type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet name="css/estilo.css" />
+		<title>Cadastro Geral</title>
+	</h:head>
+		
+	<h:body>
+		<table class="tabela">
+			<tr>
+				<td width="5%"><h:graphicImage name="imagens/ifgoiano.png" width="70%"/></td>
+				<td><p:outputLabel style="font-size:20px" value="Cadastro de Pessoas"/></td>
+				<td align="right"><h:outputLink value="Login.xhtml"> <h:graphicImage name="imagens/sair.jpg" widht="40%" height="40" title="Retornar"/></h:outputLink></td>
+			</tr>
+		</table>
+		
+		<p:growl life="3000">
+			<p:autoUpdate />
+		</p:growl>
+		
+		<p:confirmDialog global="true">
+			<p:commandButton immediate="true" value="Sim" styleClass="ui-confirmdialg-yes" icon="ui-icon-check" />
+			<p:commandButton immediate="true" value="Não" styleClass="ui-confirmdialg-no" icon="ui-icon-check" />
+		</p:confirmDialog>
+		
+		<h:form id="formulario">
+			<p:tabView activeIndex="0">
+				
+				<p:tab title="Cadastro">
+					<p:panel header="Dados Pessoais" id="painel">
+						<p:focus context="painel" for="cpf" />
+						<h:panelGrid columns="2" columnsClasses="alinharDireita,alinharEsquerda">
+						
+						<p:outputLabel value=""/>
+						<p:outputLabel value="" />
+						
+						<p:outputLabel styleClass="alinhamentoLabel" for="cpf" value="CPF: " />
+						<p:inputMask mask="999.999.999-99" id="cpf" requerid="true" requiredMenssagem="Digite o CPF!" value="${pessoaMB.pessoa.cpf_cnpj}"/>
+						
+						
+						<p:outputLabel value="Nome: " for="nome"/>
+						<p:inputText id="nome" value="${pessoaMB.pessoa.nome}" size="50" placeholder="Digite seu nome" required="true" />
+						
+						<p:outputLabel value="Email: " for="email"/>
+						<p:inputText id="email" value="${pessoaMB.pessoa.email}" size="50" placeholder="Digite seu e-mail" required="true" />
+						
+						<p:outputLabel value="Salário " for="salario"/>
+						<p:inputNumber id="salario" value="${pessoaMB.pessoa.salario}"  placeholder="Digite o salário" size="20" required="true" />
+						
+						<p:outputLabel value="" for=""/>
+						<p:inputTextarea id="observacao" cols="50" rows="5" maxlength="200" required="true" requiredMessage="Digite a observação!" counter="digitos" value="#{pessoaMB.pessoa.observacao}" counterTemplate="{0} caracteres restantes" />
+						
+						
+						<p:outputLabel value="" for=""/>
+						<p:outputLabel value="" for="" id="digitos"/>
+						
+						<p:outputLabel  for="campoData" value="Data Nasc:"/>
+						<p:calendar size="19" value="#{pessoaMB.pessoa.data_nasc}" required="true" id="campoData" showOn="button" pattern="dd/MM/yyyy" />
+						
+						<p:outputLabel for="curso" value="Curso: "/>
+						<p:selectOneMenu id="curso" value="#{pessoaMB.pessoa.curso}" filter="true" required="true">
+							<f:selectItems value="#{pessoaMB.listaCombo}" />
+						</p:selectOneMenu>
+						
+						</h:panelGrid>
+					</p:panel>
+					
+					<br/>
+					
+					<p:spacer width="500" height="20" />
+					
+					
+					<p:commandButton value="Salvar" icon="ui-icon-disk" action="#{pessoaMB.salvar}" update="formulario" >
+						<p:confirm  header="Confirmação" message="Tem certeza ?"/>
+					</p:commandButton>
+					
+					<p:commandButton value="Editar" icon="ui-icon-pencil" update="formulario"/>
+					
+					<p:commandButton value="Limpar" actionListener="#{pessoaMB.limpar}" update="formulario"/>
+					
+					<div id="buttons_export">
+						
+						<h:commandLink immediate="true">
+							<p:graphicImage name="imagens/xls.png" widht="3%" height="3%" title="Gerar xls" />
+							<p:dataExporter type="xls" target="tabela" fileName="RelatorioXLS" />
+						</h:commandLink>
+						
+						
+						<h:commandLink immediate="true">
+							<p:graphicImage name="imagens/pdf.png" widht="3%" height="3%" title="Gerar PDF" />
+							<p:dataExporter type="pdf" target="tabela" fileName="RelatorioPDF" />
+						</h:commandLink>
+						
+					</div>
+					
+					<p:dataTable value="#{pessoaMB.listaPessoa}" var="p" border="1" id="tabela" emptyMessage="Nenhum item na lista."> 
+						
+						<p:column headerText="CPF" style="text-align: center;">
+							<p:outputLabel value="#{p.cpf_cnpj}" />
+						</p:column>
+						
+						<p:column sortBy="#{p.name}" filterBy="#{p.nome}" headerText="Nome">
+							<p:outputLabel value="#{p.nome}"/>
+						</p:column>
+						
+						
+						<p:column headerText="Email" style="text-align: center;">
+							<p:outputLabel value="#{p.email}" />
+						</p:column>
+						
+						<p:column headerText="Obervações" style="text-align: center;">
+							<p:outputLabel value="#{p.observacao}" />
+						</p:column>
+						
+						<p:column sortBy="#{p.curso}" filterBy="#{p.curso}" headerText="Curso">
+							<p:outputLabel value="#{p.curso}"/>
+						</p:column>
+						
+						<p:column headerText="Salário" style="text-align: right; widht:60">
+							<h:outputText value="#{p.salario}">
+								<f:convertNumber minFractionDigits="2" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Data Nasc" style="text-align: center; widht:70">
+							<h:outputText value="#{p.data_nasc}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Editar" widht="40">
+							<p:commandButton icon="ui-icon-pencil" title="Editar" immediate="true" update="formulario" />
+						</p:column>
+						
+						<p:column headerText="Excluir" widht="40">
+							<p:commandButton icon="ui-icon-trash" title="Excluir" immediate="true" update="tabela" />
+						</p:column>
+						
+						
+					</p:dataTable>
+					
+						
+				</p:tab>
+				
+				<p:tab title="Grafico">
+				
+				</p:tab>
+	
+			</p:tabView>
+		
+		
+		</h:form>
+		
+	</h:body>
+</html>

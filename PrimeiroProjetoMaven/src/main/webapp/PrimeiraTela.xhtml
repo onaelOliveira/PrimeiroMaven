@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<tml xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastro</title>
+</h:head>
+
+<h:body>
+	<h1>Cadastro de Cliente</h1>
+	<h:form id="formulario">
+		<h:message />
+		<h:panelGrid id="grid" columns="2">
+			<h:outputLabel id="lblCpf" value="CPF: " />
+			<h:inputText id="inptxtCpf" value="#{cMB.cliente.cpf}" size="15" />
+
+			<h:outputLabel id="lblNome" value="Nome: " />
+			<h:inputText id="inptxtNome" value="#{cMB.cliente.nome}"
+				required="true" />
+
+			<h:outputLabel value="dataNasc" id="lbldataNasc" />
+			<h:inputText id="inputdataNasc"" value="#{cMB.cliente.dataNasc}" />
+
+			<h:outputLabel id="lblDescrição" value="Descrição: " />
+			<h:inputTextarea id="inpDescricao" value="#{cMB.cliente.descricao}"
+				rows="5" cols="40" />
+
+		</h:panelGrid>
+		<div style="margin-left: 15; margin-top: 1%">
+			<h:commandButton id="cmdbtGravar" value="Gravar" />
+			<h:commandButton id="cmdbtCancelar" value="Cancelar" />
+		</div>
+	</h:form>
+
+
+	<h:panelGrid columns="1">
+		<h:outputLabel value="#{cMB.cliente.concatenado}" escape="false"
+			id="lblConcatenado" />
+	</h:panelGrid>		
+</h:body>
+</html>
